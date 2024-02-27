@@ -1,0 +1,10 @@
+E:\TI\TI\Lab1\Lab1\Lab1\bin\Debug\Lab1.exe.config
+E:\TI\TI\Lab1\Lab1\Lab1\bin\Debug\Lab1.exe
+E:\TI\TI\Lab1\Lab1\Lab1\bin\Debug\Lab1.pdb
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.csproj.AssemblyReference.cache
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.Properties.Resources.resources
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.csproj.GenerateResource.cache
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.csproj.CoreCompileInputs.cache
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.exe
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.pdb
+E:\TI\TI\Lab1\Lab1\Lab1\obj\Debug\Lab1.MainForm.resources
