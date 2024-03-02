@@ -153,6 +153,7 @@
             this.radioButtonDecrypt.TabStop = true;
             this.radioButtonDecrypt.Text = "Decrypt";
             this.radioButtonDecrypt.UseVisualStyleBackColor = true;
+            this.radioButtonDecrypt.CheckedChanged += new System.EventHandler(this.radioButtonDecrypt_CheckedChanged);
             // 
             // radioButtonEncrypt
             // 
@@ -163,6 +164,7 @@
             this.radioButtonEncrypt.TabStop = true;
             this.radioButtonEncrypt.Text = "Encrypt";
             this.radioButtonEncrypt.UseVisualStyleBackColor = true;
+            this.radioButtonEncrypt.CheckedChanged += new System.EventHandler(this.radioButtonEncrypt_CheckedChanged);
             // 
             // labelChooseAction
             // 
