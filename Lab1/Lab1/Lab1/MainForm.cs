@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Lab1 {
@@ -124,7 +125,7 @@ namespace Lab1 {
             _textToEncryptVigenere = _textToEncryptVigenere.ToUpper();
             
             for (int i = 0; i < _textToEncryptVigenere.Length; i++) {
-                if (_textToEncryptVigenere[i] != ' ') {
+                if (_textToEncryptVigenere[i] >= 'А' && _textToEncryptVigenere[i] <= 'Я' || _textToEncryptVigenere[i] == 'Ё') {
                     tempLen++;
                 }
             }
@@ -133,17 +134,17 @@ namespace Lab1 {
             
             int t = 0;
             for (int j = 0; j < _textToEncryptVigenere.Length; j++) {
-                if (_textToEncryptVigenere[j] >= 'А' && _textToEncryptVigenere[j] <= 'Я' 
+                if (_textToEncryptVigenere[j] >= 'А' && _textToEncryptVigenere[j] <= 'Я' || _textToEncryptVigenere[j] == 'Ё'
                     || _textToEncryptVigenere[j] == ' ') {
                     if (_textToEncryptVigenere[j] != ' ') {
                         textToEncryptArray[t] = _textToEncryptVigenere[j];
                         t++;
                     }
                 }
-                else {
+                /*else {
                     textBoxMessages.Text = "Это не русский язык :(";
                     return null;
-                }
+                }*/
             }
 
             textBoxMessages.Clear();
@@ -157,7 +158,7 @@ namespace Lab1 {
             _textToEncryptPleifer = _textToEncryptPleifer.ToUpper();
             
             for (int i = 0; i < _textToEncryptPleifer.Length - 1; i++) {
-                if (_textToEncryptPleifer[i] != ' ') {
+                if (_textToEncryptPleifer[i] >= 65 && _textToEncryptPleifer[i] <= 90) {
                     if (_textToEncryptPleifer[i] == _textToEncryptPleifer[i + 1]) {
                         _textToEncryptPleifer.Insert(i + 1, new string(VoidSymbol, 1));
                     }
@@ -165,7 +166,7 @@ namespace Lab1 {
             }
             
             for (int i = 0; i < _textToEncryptPleifer.Length; i++) {
-                if (_textToEncryptPleifer[i] != ' ') {
+                if (_textToEncryptPleifer[i] >= 65 && _textToEncryptPleifer[i] <= 90) {
                     tempLen++;
                 }
             }
@@ -186,10 +187,10 @@ namespace Lab1 {
                         t++;
                     }
                 }
-                else {
+                /*else {
                     textBoxMessages.Text = "Not english symbol :(";
                     return null;
-                }
+                }*/
             }
 
             textBoxMessages.Clear();
@@ -225,7 +226,7 @@ namespace Lab1 {
 
                 if (action == 1) {
                     
-                    if (indexes[0, 1] + 1 >= _encryptTable.GetLength(0)
+                    if ((indexes[0, 1] + 1 >= _encryptTable.GetLength(0) && scenario == 1)
                         || (indexes[0, 1] - 1 < 0 && scenario == -1)) {
                         if (scenario == 1) {
                             encryptedText[i] = _encryptTable[indexes[0, 0], 0];
@@ -236,7 +237,7 @@ namespace Lab1 {
                         encryptedText[i + 1] = _encryptTable[indexes[1, 0], indexes[1, 1] + 1 * scenario];
                     }
                     
-                    else if (indexes[1, 1] + 1 >= _encryptTable.GetLength(0)
+                    else if ((indexes[1, 1] + 1 >= _encryptTable.GetLength(0) && scenario == 1)
                              || (indexes[1, 1] - 1 < 0 && scenario == -1)) {
                         encryptedText[i] = _encryptTable[indexes[0, 0], indexes[0, 1] + 1 * scenario];
                         if (scenario == 1) {
@@ -253,7 +254,7 @@ namespace Lab1 {
                 }
 
                 if (action == 2) {
-                    if (indexes[0, 0] + 1 >= _encryptTable.GetLength(0)
+                    if ((indexes[0, 0] + 1 >= _encryptTable.GetLength(0) && scenario == 1)
                         || (indexes[0, 0] - 1 < 0 && scenario == -1)) {
                         if (scenario == 1) {
                             encryptedText[i] = _encryptTable[0, indexes[0, 1]];
@@ -261,17 +262,18 @@ namespace Lab1 {
                         else {
                             encryptedText[i] = _encryptTable[_encryptTable.GetLength(0) - 1, indexes[0, 1]];
                         }
-                        encryptedText[i + 1] = _encryptTable[indexes[1, 0] + 1 * scenario, indexes[1, 1]];
+                        encryptedText[i + 1] = _encryptTable[indexes[1, 0] + 1 * scenario, indexes[1, 1] ];
                     }
-                    else if (indexes[1, 0] + 1 >= _encryptTable.GetLength(0)
+                    
+                    else if ((indexes[1, 0] + 1 >= _encryptTable.GetLength(0) && scenario == 1)
                              || (indexes[1, 0] - 1 < 0 && scenario == -1)) {
+                        encryptedText[i] = _encryptTable[indexes[0, 0] + 1 * scenario, indexes[0, 1]];
                         if (scenario == 1) {
-                            encryptedText[i + 1] = _encryptTable[0, indexes[1, 1]];
+                            encryptedText[i + 1] = _encryptTable[0, indexes[1, 1]];                       
                         }
                         else {
                             encryptedText[i + 1] = _encryptTable[_encryptTable.GetLength(0) - 1, indexes[1, 1]];
                         }
-                        encryptedText[i] = _encryptTable[indexes[0, 0] + 1 * scenario, indexes[0, 1]];
                     }
                     else {
                         encryptedText[i] = _encryptTable[indexes[0, 0] + 1 * scenario, indexes[0, 1]];
@@ -498,6 +500,27 @@ namespace Lab1 {
             return indexes;
         }
 
-        
+
+        private void buttonOpen_Click(object sender, EventArgs e) {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK) {
+                using (FileStream stream = File.OpenRead(openFileDialog1.FileName)) {
+                    byte[] strBytes = new byte[stream.Length];
+                    stream.Read(strBytes, 0, strBytes.Length);
+                    string str = System.Text.Encoding.Default.GetString(strBytes);
+                    textBox1.Text = str;
+                    stream.Close();
+                }
+            }
+        }
+
+        private void buttonSave_Click(object sender, EventArgs e) {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK) {
+                using (FileStream stream = new FileStream(saveFileDialog1.FileName, FileMode.OpenOrCreate)) {
+                    byte[] strBytes = System.Text.Encoding.Default.GetBytes(textBox2.Text);
+                    stream.Write(strBytes, 0, strBytes.Length);
+                    stream.Close();
+                }
+            }
+        }
     }
 }

@@ -41,6 +41,10 @@
             this.labelMessages = new System.Windows.Forms.Label();
             this.textBoxKeys = new System.Windows.Forms.TextBox();
             this.labelKey = new System.Windows.Forms.Label();
+            this.buttonSave = new System.Windows.Forms.Button();
+            this.buttonOpen = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.PanelRadioAlgorithm.SuspendLayout();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
@@ -198,11 +202,37 @@
             this.labelKey.TabIndex = 12;
             this.labelKey.Text = "Key (Vigenere only)";
             // 
+            // buttonSave
+            // 
+            this.buttonSave.Location = new System.Drawing.Point(233, 395);
+            this.buttonSave.Name = "buttonSave";
+            this.buttonSave.Size = new System.Drawing.Size(162, 52);
+            this.buttonSave.TabIndex = 13;
+            this.buttonSave.Text = "Save";
+            this.buttonSave.UseVisualStyleBackColor = true;
+            this.buttonSave.Click += new System.EventHandler(this.buttonSave_Click);
+            // 
+            // buttonOpen
+            // 
+            this.buttonOpen.Location = new System.Drawing.Point(276, 347);
+            this.buttonOpen.Name = "buttonOpen";
+            this.buttonOpen.Size = new System.Drawing.Size(75, 31);
+            this.buttonOpen.TabIndex = 14;
+            this.buttonOpen.Text = "Open";
+            this.buttonOpen.UseVisualStyleBackColor = true;
+            this.buttonOpen.Click += new System.EventHandler(this.buttonOpen_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(782, 553);
+            this.Controls.Add(this.buttonOpen);
+            this.Controls.Add(this.buttonSave);
             this.Controls.Add(this.labelKey);
             this.Controls.Add(this.textBoxKeys);
             this.Controls.Add(this.labelMessages);
@@ -226,6 +256,12 @@
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.Button buttonOpen;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+
+        private System.Windows.Forms.Button buttonSave;
 
         private System.Windows.Forms.TextBox textBoxKeys;
         private System.Windows.Forms.Label labelKey;
