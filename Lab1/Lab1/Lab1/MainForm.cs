@@ -53,6 +53,7 @@ namespace Lab1 {
         public static char VoidSymbol = 'X';
         
         private string _textToEncryptPleifer;
+        private string _textToDecryptPleifer;
         
         private string _textToEncryptVigenere;
         private string _textToDecryptVigenere;
@@ -151,39 +152,73 @@ namespace Lab1 {
             return textToEncryptArray;
             
         }
+
+        private char[] PrepareTextPleiferToDecrypt() {
+            int tempLen = 0;
+            _textToDecryptPleifer = _textToDecryptPleifer.ToUpper();
+            
+            for (int i = 0; i < _textToDecryptPleifer.Length; i++) {
+                if (_textToDecryptPleifer[i] >= 65 && _textToDecryptPleifer[i] <= 90) {
+                    tempLen++;
+                }
+            }
+            var textToDecryptArray = new char[tempLen];
+
+            int t = 0;
+            for (int j = 0; j < _textToDecryptPleifer.Length; j++) {
+                if (_textToDecryptPleifer[j] >= 65 && _textToDecryptPleifer[j] <= 90 
+                    || _textToDecryptPleifer[j] == ' ') {
+                    if (_textToDecryptPleifer[j] != ' ') {
+                        textToDecryptArray[t] = _textToDecryptPleifer[j];
+                        t++;
+                    }
+                }
+            }
+
+            textBoxMessages.Clear();
+            return textToDecryptArray;
+            
+        }
         
         private char[] PrepareTextPleifer() {
 
             int tempLen = 0;
             _textToEncryptPleifer = _textToEncryptPleifer.ToUpper();
+            string textToEncryptPleiferReady = _textToEncryptPleifer;
             
             for (int i = 0; i < _textToEncryptPleifer.Length - 1; i++) {
                 if (_textToEncryptPleifer[i] >= 65 && _textToEncryptPleifer[i] <= 90) {
                     if (_textToEncryptPleifer[i] == _textToEncryptPleifer[i + 1]) {
-                        _textToEncryptPleifer.Insert(i + 1, new string(VoidSymbol, 1));
+                        if (_textToEncryptPleifer[i] != VoidSymbol) {
+                            //textToEncryptPleiferReady.Insert(i + 1, new string(VoidSymbol, 1));
+                            textToEncryptPleiferReady = textToEncryptPleiferReady.Substring(0, i + 1) +
+                                                        new string(VoidSymbol, 1) +
+                                                        textToEncryptPleiferReady.Substring(i + 1);
+                            //s = s.Substring(0, index) + new string('*', repCount) + s.Substring(index + repCount);
+                        }
                     }
                 }
             }
             
-            for (int i = 0; i < _textToEncryptPleifer.Length; i++) {
-                if (_textToEncryptPleifer[i] >= 65 && _textToEncryptPleifer[i] <= 90) {
+            for (int i = 0; i < textToEncryptPleiferReady.Length; i++) {
+                if (textToEncryptPleiferReady[i] >= 65 && textToEncryptPleiferReady[i] <= 90) {
                     tempLen++;
                 }
             }
             
             if ((tempLen & 1) != 0) {
-                _textToEncryptPleifer += VoidSymbol;
+                textToEncryptPleiferReady += VoidSymbol;
                 tempLen++;
             }
            
             var textToEncryptArray = new char[tempLen];
 
             int t = 0;
-            for (int j = 0; j < _textToEncryptPleifer.Length; j++) {
-                if (_textToEncryptPleifer[j] >= 65 && _textToEncryptPleifer[j] <= 90 
-                    || _textToEncryptPleifer[j] == ' ') {
-                    if (_textToEncryptPleifer[j] != ' ') {
-                        textToEncryptArray[t] = _textToEncryptPleifer[j];
+            for (int j = 0; j < textToEncryptPleiferReady.Length; j++) {
+                if (textToEncryptPleiferReady[j] >= 65 && textToEncryptPleiferReady[j] <= 90 
+                    || textToEncryptPleiferReady[j] == ' ') {
+                    if (textToEncryptPleiferReady[j] != ' ') {
+                        textToEncryptArray[t] = textToEncryptPleiferReady[j];
                         t++;
                     }
                 }
@@ -204,6 +239,7 @@ namespace Lab1 {
              *  scenario = -1 means decrypt
              */
             _textToEncryptPleifer = textBox1.Text;
+            _textToDecryptPleifer = textBox1.Text;
             
             int j = 0;
             int action = 0;
@@ -211,7 +247,14 @@ namespace Lab1 {
             char[] symbols = new char[2];
             int k = 0;
             
-            var textToEncryptArray = PrepareTextPleifer();
+            char[] textToEncryptArray;
+            if (scenario == -1) {
+                textToEncryptArray = PrepareTextPleiferToDecrypt();
+            }
+            else {
+                textToEncryptArray = PrepareTextPleifer();
+            }
+            
             if (textToEncryptArray == null) {
                 return null;
             }
@@ -416,7 +459,6 @@ namespace Lab1 {
 
             var keyVigenereArray = PrepareKeyVigenere(textToEncryptArray.Length);
             if (keyVigenereArray == null) {
-                
                 return null;
             }
             
@@ -441,6 +483,11 @@ namespace Lab1 {
             _textToDecryptVigenere = textBox1.Text;
             _keyVigenere = textBoxKeys.Text;
             
+            var textToDecryptArray = PrepareTextVigenereToDecrypt();
+            if (textToDecryptArray == null) {
+                return null;
+            }
+            
             var keyVigenereArray = PrepareKeyVigenere(_textToDecryptVigenere.Length);
             if (keyVigenereArray == null) {
                 return null;
@@ -450,8 +497,8 @@ namespace Lab1 {
             var indexes = new int[2];
             var decryptedText = new char[_textToDecryptVigenere.Length];
             
-            for (int i = 0; i < _textToDecryptVigenere.Length; i++) {
-                symbols[0] = _textToDecryptVigenere[i];
+            for (int i = 0; i < textToDecryptArray.Length; i++) {
+                symbols[0] = textToDecryptArray[i];
                 symbols[1] = keyVigenereArray[i];
 
                 indexes = CheckVigenereTableToDecrypt(symbols);
@@ -463,6 +510,34 @@ namespace Lab1 {
             return new string(decryptedText);
         }
 
+        private char[] PrepareTextVigenereToDecrypt() {
+            int tempLen = 0;
+            _textToDecryptVigenere = _textToDecryptVigenere.ToUpper();
+            
+            for (int i = 0; i < _textToDecryptVigenere.Length; i++) {
+                if (_textToDecryptVigenere[i] >= 'А' && _textToDecryptVigenere[i] <= 'Я' || _textToDecryptVigenere[i] == 'Ё') {
+                    tempLen++;
+                }
+            }
+            
+            var textToDecryptArray = new char[tempLen];
+            
+            int t = 0;
+            for (int j = 0; j < _textToDecryptVigenere.Length; j++) {
+                if (_textToDecryptVigenere[j] >= 'А' && _textToDecryptVigenere[j] <= 'Я' || _textToDecryptVigenere[j] == 'Ё'
+                    || _textToDecryptVigenere[j] == ' ') {
+                    if (_textToDecryptVigenere[j] != ' ') {
+                        textToDecryptArray[t] = _textToDecryptVigenere[j];
+                        t++;
+                    }
+                }
+            }
+
+            textBoxMessages.Clear();
+            return textToDecryptArray;
+            
+        }
+        
         private int[] CheckVigenereTable(char[] symbols) {
 
             var indexes = new int[2];
@@ -499,8 +574,7 @@ namespace Lab1 {
             
             return indexes;
         }
-
-
+        
         private void buttonOpen_Click(object sender, EventArgs e) {
             if (openFileDialog1.ShowDialog() == DialogResult.OK) {
                 using (FileStream stream = File.OpenRead(openFileDialog1.FileName)) {
